@@ -1,6 +1,9 @@
-# coding:utf-8
+#  coding:utf-8
+#  本地建立python服务器，提供一个可以获取ip的接口
+#  Author: seventeen
 import socket
 import random
+import sys
 
 HOST = "0.0.0.0"
 PORT = 1117
@@ -25,7 +28,7 @@ Server: seventeen
 {
   "proxy": "%s"
 }
-'''%(proxy_ip)
+''' % (proxy_ip)
         client_connection.sendall(http_response.encode("utf-8"))
         client_connection.close()
 
@@ -33,8 +36,11 @@ Server: seventeen
 def get_ip():
     with open('ip.txt', 'r', encoding="utf-8") as ips:
         ip_list = ips.readlines()
-    return ip_list[random.randint(0, len(ip_list)-1)].strip('\n')
+    return ip_list[random.randint(0, len(ip_list) - 1)].strip('\n')
 
 
 if __name__ == '__main__':
-    server()
+    if sys.version_info < (3, 0):
+        sys.stdout.write("wrote by Python 3.x\n")
+        sys.exit(1)
+    main = server()

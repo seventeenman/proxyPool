@@ -16,6 +16,8 @@
 > selenium
 >
 > queue
+>
+> getopt
 
 ## QUICK START
 
@@ -24,7 +26,8 @@
 Crawl the ip address on the free proxy website through the selenium module and save it to ip.txt.
 
 ```python
-python3 save.py
+python3 save.py -p {page_count}
+python3 save.py -p 2
 ```
 
 ### Survival detection
@@ -32,7 +35,8 @@ python3 save.py
 Check the survival of the ip address in ip.txt in a multi-threaded form.
 
 ```pyt
-python3 check.py
+python3 check.py -t {thread_count}
+python3 check.py -t 2
 ```
 
 ### usage

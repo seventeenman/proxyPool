@@ -1,8 +1,12 @@
-# coding=utf-8
+#  coding:utf-8
+#  使用多线程检测ip的存活，并且将存活ip覆盖原来的ip.txt
+#  Author: seventeen
 import time
 import threading
 import queue
 import requests
+import sys
+import getopt
 
 
 def get_ip():
@@ -11,10 +15,12 @@ def get_ip():
     init()
     return ip_list
 
+
 def init():
     # 提取结束清空ip.txt
     with open('ip.txt', 'w') as ip:
         ip.write('')
+
 
 class test_ip(threading.Thread):
     def __init__(self, data):
@@ -58,7 +64,8 @@ def check_live():
 
     data = queue.Queue()
     threads = []
-    threads_count = 2
+    global threads_count
+    threads_count = int(threads_count)
 
     for ip in ip_list:
         ip = ip.strip('\n')
@@ -107,11 +114,35 @@ def save_ip(ip_save):
     print(proxies)
 
 
+def getArg():
+    global threads_count
+    if len(sys.argv) < 2:
+        sys.stdout.write("plz input: -t {threads_count}" + "\n")
+        sys.exit(1)
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "t:", ["threads_count="])
+    except getopt.GetoptError:
+        sys.stdout.write("plz input: -t {threads_count}" + "\n")
+        sys.exit(1)
+    for opt, arg in opts:
+        if opt in ("-t", "--threads_count"):
+            threads_count = arg
+            sys.stdout.write("[*] threads_count: " + threads_count + "\n")
+    return [threads_count]
+
+
 if __name__ == '__main__':
+    if sys.version_info < (3, 0):
+        sys.stdout.write("wrote by Python 3.x\n")
+        sys.exit(1)
+    threads_count = ''
     proxies = []
     headers = {
         'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4495.0 Safari/537.36"
     }
     requests.packages.urllib3.disable_warnings()
-    check_live()
+    arg_list = []
+    arg_list = getArg()
+    threads_count = arg_list[0]
+    main = check_live()
     save_ip(proxies)

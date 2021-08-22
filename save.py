@@ -1,7 +1,11 @@
-# coding=utf-8
+#  coding:utf-8
+#  自动化爬虫爬取网站上的代理ip并保存于ip.txt
+#  Author: seventeen
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
+import sys
+import getopt
 
 
 def init():
@@ -40,8 +44,32 @@ def controller(page):
     save_ip(res, page)
 
 
+def getArg():
+    global pages_count
+    if len(sys.argv) < 2:
+        sys.stdout.write("plz input: -p {pages_count}" + "\n")
+        sys.exit(1)
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "p:", ["pages_count="])
+    except getopt.GetoptError:
+        sys.stdout.write("plz input: -p {pages_count}" + "\n")
+        sys.exit(1)
+    for opt, arg in opts:
+        if opt in ("-p", "--pages_count"):
+            pages_count = arg
+            sys.stdout.write("[*] pages_count: " + pages_count + "\n")
+    return [pages_count]
+
+
 if __name__ == '__main__':
+    if sys.version_info < (3, 0):
+        sys.stdout.write("wrote by Python 3.x\n")
+        sys.exit(1)
     init()
+    arg_list = []
+    arg_list = getArg()
     # 爬取的页数
-    for page in range(1, 3):
+    pages_count = ''
+    pages_count = arg_list[0]
+    for page in range(1, int(pages_count) + 1):
         controller(page)
