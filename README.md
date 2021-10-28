@@ -9,15 +9,8 @@
 
 > python >= 3.0
 >
-> requests
->
-> threading
->
-> selenium
->
-> queue
->
-> getopt
+> requests==2.25.1
+>selenium==3.141.0
 
 ## QUICK START
 
